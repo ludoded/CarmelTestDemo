@@ -220,6 +220,7 @@
 				TargetAttributes = {
 					63B2C7281C68D3150085D44E = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = 2JRU28287L;
 					};
 					63B2C73C1C68D3150085D44E = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -455,6 +456,7 @@
 			baseConfigurationReference = 363FEB1A0170E880F09F40AA /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = AdSDKCarmel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Ayk.AdSDKCarmel;
@@ -467,6 +469,7 @@
 			baseConfigurationReference = 6A0890FF5C31D4F8571FE01A /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = AdSDKCarmel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Ayk.AdSDKCarmel;

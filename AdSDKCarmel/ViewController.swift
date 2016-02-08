@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     var currentAdApp: AdApp?
     var timer: NSTimer?
     var finishTimer: NSTimer?
+    var backgroundTaskIdentifier: UIBackgroundTaskIdentifier?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,15 +52,17 @@ class ViewController: UIViewController {
     }
     
     func checkNewFreeSpace() {
+        print("checking...")
         let initFreeSpace = initialFreeSpace() ?? 0
         let currentFreeSpace = DeviceUtil().deviceRemainingFreeSpaceInBytes() ?? 0
         
         let difference = initFreeSpace - currentFreeSpace
-        let appSize = DeviceUtil.appSizeToBytes(currentAdApp!.appSize!)
+        let appSize = DeviceUtil.appSizeToBytes(currentAdApp!.appSize!) / 2
         
         if difference >= appSize {
             print("Assume app was downloaded")
             stopScanning()
+            showNotification()
         }
     }
     
@@ -68,13 +71,33 @@ class ViewController: UIViewController {
         finishTimer?.invalidate()
     }
     
+    private func showNotification() {
+        let notification = UILocalNotification()
+        notification.alertAction = currentAdApp?.title
+        notification.alertBody = "Assume app was downloaded"
+        notification.fireDate = nil
+        notification.soundName = UILocalNotificationDefaultSoundName
+        
+        print("presenting local notification")
+        UIApplication.sharedApplication().presentLocalNotificationNow(notification)
+    }
+    
     private func saveInitialFreeSpace() {
         let ud = NSUserDefaults.standardUserDefaults()
         ud.setObject(NSNumber(longLong:DeviceUtil().deviceRemainingFreeSpaceInBytes()!), forKey: "initialFreeSpace")
         ud.synchronize()
         
-        timer = NSTimer.scheduledTimerWithTimeInterval(5.0, target: self, selector: "checkNewFreeSpace", userInfo: nil, repeats: true)
-        finishTimer = NSTimer.scheduledTimerWithTimeInterval(600.0, target: self, selector: "stopScanning", userInfo: nil, repeats: false)
+        backgroundTaskIdentifier = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler { () -> Void in
+            UIApplication.sharedApplication().endBackgroundTask(self.backgroundTaskIdentifier!)
+        }
+        
+        stopScanning()
+        
+        timer = NSTimer(timeInterval: 5.0, target: self, selector: "checkNewFreeSpace", userInfo: nil, repeats: true)
+        finishTimer = NSTimer(timeInterval: 200.0, target: self, selector: "stopScanning", userInfo: nil, repeats: false)
+        
+        NSRunLoop.mainRunLoop().addTimer(timer!, forMode: NSDefaultRunLoopMode)
+        NSRunLoop.mainRunLoop().addTimer(finishTimer!, forMode: NSDefaultRunLoopMode)
     }
     
     private func initialFreeSpace() -> Int64? {
