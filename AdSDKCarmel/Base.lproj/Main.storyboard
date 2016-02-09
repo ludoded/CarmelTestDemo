@@ -18,34 +18,80 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hzW-g1-blX">
-                                <rect key="frame" x="30" y="30" width="540" height="540"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <gestureRecognizers/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NrN-Cs-UNO">
+                                <rect key="frame" x="8" y="20" width="584" height="500"/>
+                                <color key="backgroundColor" red="0.92830159155937053" green="0.92830159155937053" blue="0.92830159155937053" alpha="1" colorSpace="calibratedRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="iNa-U6-Qgt">
+                                    <size key="itemSize" width="150" height="190"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" reuseIdentifier="adCollectionViewCell" id="3nl-eW-Gyi" customClass="AdCollectionViewCell" customModule="AdSDKCarmel" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="150" height="190"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="150" height="190"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NYY-1D-vex">
+                                                    <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="App Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="RJq-Xj-I80">
+                                                    <rect key="frame" x="0.0" y="150" width="150" height="20"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="Bhm-rV-sek">
+                                                    <rect key="frame" x="0.0" y="170" width="150" height="20"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-Italic" family="Avenir Next" pointSize="15"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <connections>
+                                            <outlet property="appSizeLabel" destination="Bhm-rV-sek" id="6yd-6M-LUF"/>
+                                            <outlet property="iconImageView" destination="NYY-1D-vex" id="mTD-oT-4RG"/>
+                                            <outlet property="titleLabel" destination="RJq-Xj-I80" id="uPB-aN-8dU"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="l61-av-hxt" appends="YES" id="guE-42-Pqq"/>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="D4D-qK-tTm"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="JnS-1d-D8g"/>
                                 </connections>
-                            </view>
+                            </collectionView>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="tzx-zW-Uow">
+                                <rect key="frame" x="26" y="550" width="550" height="29"/>
+                                <segments>
+                                    <segment title="Full Size"/>
+                                    <segment title="1/2 Size"/>
+                                    <segment title="1/3 Size"/>
+                                </segments>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="hzW-g1-blX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="30" id="6ys-cd-uMr"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="hzW-g1-blX" secondAttribute="bottom" constant="30" id="bwt-Gw-KSB"/>
-                            <constraint firstAttribute="trailing" secondItem="hzW-g1-blX" secondAttribute="trailing" constant="30" id="heo-V8-8b4"/>
-                            <constraint firstItem="hzW-g1-blX" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="30" id="ztJ-Wh-pF3"/>
+                            <constraint firstItem="NrN-Cs-UNO" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="O50-ke-DEQ"/>
+                            <constraint firstAttribute="trailing" secondItem="tzx-zW-Uow" secondAttribute="trailing" constant="24" id="UUv-Pr-egd"/>
+                            <constraint firstItem="tzx-zW-Uow" firstAttribute="top" secondItem="NrN-Cs-UNO" secondAttribute="bottom" constant="30" id="Zjt-jL-wSp"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="tzx-zW-Uow" secondAttribute="bottom" constant="22" id="aFE-3O-sRB"/>
+                            <constraint firstItem="NrN-Cs-UNO" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="20" id="cD4-f5-xVG"/>
+                            <constraint firstItem="tzx-zW-Uow" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="26" id="dji-DZ-BX8"/>
+                            <constraint firstAttribute="trailing" secondItem="NrN-Cs-UNO" secondAttribute="trailing" constant="8" id="vqR-XP-4bw"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="adView" destination="hzW-g1-blX" id="zQc-QW-85T"/>
+                        <outlet property="collectionView" destination="NrN-Cs-UNO" id="27b-Ie-0o6"/>
+                        <outlet property="notificationCaseSegmented" destination="tzx-zW-Uow" id="SAD-tU-ICd"/>
                         <segue destination="jbL-3S-dCK" kind="presentation" identifier="openWebScreen" id="mqK-hX-hUt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="l61-av-hxt">
-                    <connections>
-                        <action selector="openURL:" destination="BYZ-38-t0r" id="LL2-aw-jDS"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="544" y="527"/>
         </scene>

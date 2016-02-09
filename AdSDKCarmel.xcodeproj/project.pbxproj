@@ -18,6 +18,7 @@
 		63B2C7531C68D7610085D44E /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B2C7521C68D7600085D44E /* API.swift */; };
 		63B2C7561C68D7D50085D44E /* AdApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B2C7551C68D7D50085D44E /* AdApp.swift */; };
 		63B2C7591C68E3790085D44E /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B2C7581C68E3790085D44E /* WebViewController.swift */; };
+		63B2C75C1C6A275A0085D44E /* AdCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B2C75B1C6A275A0085D44E /* AdCollectionViewCell.swift */; };
 		B4557971989B91E36995323C /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EA480ADAE48BED68D062389 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,6 +50,7 @@
 		63B2C7521C68D7600085D44E /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = API.swift; path = Networking/API.swift; sourceTree = "<group>"; };
 		63B2C7551C68D7D50085D44E /* AdApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AdApp.swift; path = Model/AdApp.swift; sourceTree = "<group>"; };
 		63B2C7581C68E3790085D44E /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		63B2C75B1C6A275A0085D44E /* AdCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AdCollectionViewCell.swift; path = Controller/Main/AdCollectionViewCell.swift; sourceTree = "<group>"; };
 		6A0890FF5C31D4F8571FE01A /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,9 +147,18 @@
 		63B2C7571C68E3610085D44E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				63B2C75A1C6A272F0085D44E /* Home */,
 				63B2C7581C68E3790085D44E /* WebViewController.swift */,
 			);
 			name = Controller;
+			sourceTree = "<group>";
+		};
+		63B2C75A1C6A272F0085D44E /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				63B2C75B1C6A275A0085D44E /* AdCollectionViewCell.swift */,
+			);
+			name = Home;
 			sourceTree = "<group>";
 		};
 		6D8E8EC0B35B28182595D85A /* Frameworks */ = {
@@ -321,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B2C7561C68D7D50085D44E /* AdApp.swift in Sources */,
+				63B2C75C1C6A275A0085D44E /* AdCollectionViewCell.swift in Sources */,
 				63B2C7511C68D5FD0085D44E /* Router.swift in Sources */,
 				63B2C72F1C68D3150085D44E /* ViewController.swift in Sources */,
 				63B2C72D1C68D3150085D44E /* AppDelegate.swift in Sources */,

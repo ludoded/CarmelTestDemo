@@ -15,14 +15,14 @@ enum AppSizeType {
 }
 
 class DeviceUtil {
-    func deviceRemainingFreeSpaceInBytes() -> Int64? {
+    func deviceRemainingFreeSpaceInBytes() -> Double? {
         let documentDirectoryPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         var attributes: [String: AnyObject]
         do {
             attributes = try NSFileManager.defaultManager().attributesOfFileSystemForPath(documentDirectoryPath.last! as String)
             let freeSize = attributes[NSFileSystemFreeSize] as? NSNumber
             if (freeSize != nil) {
-                return freeSize?.longLongValue
+                return freeSize?.doubleValue
             } else {
                 return nil
             }
@@ -31,7 +31,7 @@ class DeviceUtil {
         }
     }
     
-    static func appSizeToBytes(size: String) -> Int64 {
+    static func appSizeToBytes(size: String) -> Double {
         let appSizeType = DeviceUtil.appSizeType(size)
         let appSize = atof(size)//NSNumberFormatter().numberFromString(size)?.doubleValue ?? 0
         var multiplier: Int64 = 1
@@ -46,7 +46,7 @@ class DeviceUtil {
             multiplier *= 1024 * 1024 * 1024
         }
         
-        return Int64(appSize * Double(multiplier))
+        return appSize * Double(multiplier)
     }
     
     private static func appSizeType(size: String) -> AppSizeType {

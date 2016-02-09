@@ -11,15 +11,19 @@ import Alamofire
 import SwiftyJSON
 
 class ViewController: UIViewController {
-    @IBOutlet weak var adView: UIView!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var notificationCaseSegmented: UISegmentedControl!
     
     var currentAdApp: AdApp?
+    var appsArray = [AdApp]()
     var timer: NSTimer?
     var finishTimer: NSTimer?
     var backgroundTaskIdentifier: UIBackgroundTaskIdentifier?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.alwaysBounceVertical = true
         
         let params = ["id":"d016c31d-0778-488e-bf8c-4fdb8ddde8e0", "cnt":"200", "type":"json"]
         API.getApps(params).responseJSON { (response) -> Void in
@@ -28,26 +32,15 @@ class ViewController: UIViewController {
                 let json = JSON(data)
                 if let apps = json["apps"].array {
                     for app in apps {
-                        self.setupAd(AdApp(json: app))
-                        break
+                        self.appsArray.append(AdApp(json: app))
                     }
+                    
+                    self.collectionView.reloadData()
                 }
                 
             case .Failure(let error):
                 print("Request failed with error: \(error)")
             }
-        }
-    }
-    
-    func setupAd(adApp: AdApp) {
-        currentAdApp = adApp
-        
-        let imageView = UIImageView(frame: adView.bounds)
-        imageView.contentMode = .ScaleAspectFit
-        adView.addSubview(imageView)
-        
-        API.imageFromURL(adApp.imageWideURL ?? "").response { (_, _, data, _) -> Void in
-            imageView.image = UIImage(data: data!, scale: 1)
         }
     }
     
@@ -57,7 +50,9 @@ class ViewController: UIViewController {
         let currentFreeSpace = DeviceUtil().deviceRemainingFreeSpaceInBytes() ?? 0
         
         let difference = initFreeSpace - currentFreeSpace
-        let appSize = DeviceUtil.appSizeToBytes(currentAdApp!.appSize!) / 2
+        
+        let notifCase = notificationCaseSegmented.selectedSegmentIndex
+        let appSize = DeviceUtil.appSizeToBytes(currentAdApp!.appSize!) * ((notifCase == 1) ? 0.5 : (notifCase == 2) ? 0.33 : 1.0)
         
         if difference >= appSize {
             print("Assume app was downloaded")
@@ -84,7 +79,7 @@ class ViewController: UIViewController {
     
     private func saveInitialFreeSpace() {
         let ud = NSUserDefaults.standardUserDefaults()
-        ud.setObject(NSNumber(longLong:DeviceUtil().deviceRemainingFreeSpaceInBytes()!), forKey: "initialFreeSpace")
+        ud.setObject(NSNumber(double:DeviceUtil().deviceRemainingFreeSpaceInBytes()!), forKey: "initialFreeSpace")
         ud.synchronize()
         
         backgroundTaskIdentifier = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler { () -> Void in
@@ -100,11 +95,11 @@ class ViewController: UIViewController {
         NSRunLoop.mainRunLoop().addTimer(finishTimer!, forMode: NSDefaultRunLoopMode)
     }
     
-    private func initialFreeSpace() -> Int64? {
+    private func initialFreeSpace() -> Double? {
         let ud = NSUserDefaults.standardUserDefaults()
         let freeSpaceNumber = ud.objectForKey("initialFreeSpace") as? NSNumber
         
-        return freeSpaceNumber?.longLongValue
+        return freeSpaceNumber?.doubleValue
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -115,10 +110,32 @@ class ViewController: UIViewController {
             saveInitialFreeSpace()
         }
     }
+}
+
+extension ViewController: UICollectionViewDataSource {
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return appsArray.count
+    }
     
-    @IBAction func openURL(sender: AnyObject) {
-        if currentAdApp != nil {
-            performSegueWithIdentifier("openWebScreen", sender: nil)
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        let item = collectionView.dequeueReusableCellWithReuseIdentifier("adCollectionViewCell", forIndexPath: indexPath) as? AdCollectionViewCell
+        let adApp = appsArray[indexPath.row]
+        
+        API.imageFromURL(adApp.imageURL ?? "").response { (_, _, data, _) -> Void in
+            item?.iconImageView.image = UIImage(data: data!, scale: 1)
         }
+        
+        item?.titleLabel.text = adApp.title
+        item?.appSizeLabel.text = "Size: \(adApp.appSize!)"
+        
+        return item!
+    }
+}
+
+extension ViewController: UICollectionViewDelegate {
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        currentAdApp = appsArray[indexPath.row]
+        
+        performSegueWithIdentifier("openWebScreen", sender: nil)
     }
 }
