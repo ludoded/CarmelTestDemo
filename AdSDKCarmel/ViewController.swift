@@ -99,7 +99,7 @@ class ViewController: UIViewController, AdSDKDelegate {
     private func showNotification() {
         let notification = UILocalNotification()
         notification.alertAction = currentAdApp!.title!
-        notification.alertBody = "\(currentAdApp!.title!) (id: \(currentAdApp!.idx!)) installed, app size: \(currentAdApp!.appSize!)"
+        notification.alertBody = "\(currentAdApp!.title!) (id: \(currentAdApp!.iosPackage!)) installed, app size: \(currentAdApp!.appSize!)"
         notification.fireDate = nil
         notification.soundName = UILocalNotificationDefaultSoundName
         
