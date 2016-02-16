@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NrN-Cs-UNO">
-                                <rect key="frame" x="8" y="20" width="584" height="500"/>
+                                <rect key="frame" x="8" y="20" width="584" height="561"/>
                                 <color key="backgroundColor" red="0.92830159155937053" green="0.92830159155937053" blue="0.92830159155937053" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="iNa-U6-Qgt">
                                     <size key="itemSize" width="150" height="190"/>
@@ -65,29 +65,17 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="JnS-1d-D8g"/>
                                 </connections>
                             </collectionView>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="tzx-zW-Uow">
-                                <rect key="frame" x="26" y="550" width="550" height="29"/>
-                                <segments>
-                                    <segment title="Full Size"/>
-                                    <segment title="1/2 Size"/>
-                                    <segment title="1/3 Size"/>
-                                </segments>
-                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="NrN-Cs-UNO" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="8" id="O50-ke-DEQ"/>
-                            <constraint firstAttribute="trailing" secondItem="tzx-zW-Uow" secondAttribute="trailing" constant="24" id="UUv-Pr-egd"/>
-                            <constraint firstItem="tzx-zW-Uow" firstAttribute="top" secondItem="NrN-Cs-UNO" secondAttribute="bottom" constant="30" id="Zjt-jL-wSp"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="tzx-zW-Uow" secondAttribute="bottom" constant="22" id="aFE-3O-sRB"/>
                             <constraint firstItem="NrN-Cs-UNO" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="20" id="cD4-f5-xVG"/>
-                            <constraint firstItem="tzx-zW-Uow" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="26" id="dji-DZ-BX8"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="NrN-Cs-UNO" secondAttribute="bottom" constant="19" id="ckd-tE-IcD"/>
                             <constraint firstAttribute="trailing" secondItem="NrN-Cs-UNO" secondAttribute="trailing" constant="8" id="vqR-XP-4bw"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="NrN-Cs-UNO" id="27b-Ie-0o6"/>
-                        <outlet property="notificationCaseSegmented" destination="tzx-zW-Uow" id="SAD-tU-ICd"/>
                         <segue destination="jbL-3S-dCK" kind="presentation" identifier="openWebScreen" id="mqK-hX-hUt"/>
                     </connections>
                 </viewController>

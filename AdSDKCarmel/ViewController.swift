@@ -10,9 +10,12 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class ViewController: UIViewController {
+protocol AdSDKDelegate {
+    func saveInitialFreeSpace()
+}
+
+class ViewController: UIViewController, AdSDKDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var notificationCaseSegmented: UISegmentedControl!
     
     var currentAdApp: AdApp?
     var appsArray = [AdApp]()
@@ -48,11 +51,12 @@ class ViewController: UIViewController {
         print("checking...")
         let initFreeSpace = initialFreeSpace() ?? 0
         let currentFreeSpace = DeviceUtil().deviceRemainingFreeSpaceInBytes() ?? 0
+        print("current: \(currentFreeSpace / (1024 * 1024))")
         
         let difference = initFreeSpace - currentFreeSpace
+        print("difference: \(difference / (1024 * 1024))")
         
-        let notifCase = notificationCaseSegmented.selectedSegmentIndex
-        let appSize = DeviceUtil.appSizeToBytes(currentAdApp!.appSize!) * ((notifCase == 1) ? 0.5 : (notifCase == 2) ? 0.33 : 1.0)
+        let appSize = DeviceUtil.appSizeToBytes(currentAdApp!.appSize!)
         
         if difference >= appSize {
             print("Assume app was downloaded")
@@ -66,25 +70,22 @@ class ViewController: UIViewController {
         finishTimer?.invalidate()
     }
     
-    private func showNotification() {
-        let notification = UILocalNotification()
-        notification.alertAction = currentAdApp?.title
-        notification.alertBody = "Assume app was downloaded"
-        notification.fireDate = nil
-        notification.soundName = UILocalNotificationDefaultSoundName
-        
-        print("presenting local notification")
-        UIApplication.sharedApplication().presentLocalNotificationNow(notification)
-    }
-    
-    private func saveInitialFreeSpace() {
-        let ud = NSUserDefaults.standardUserDefaults()
-        ud.setObject(NSNumber(double:DeviceUtil().deviceRemainingFreeSpaceInBytes()!), forKey: "initialFreeSpace")
-        ud.synchronize()
-        
+    func saveInitialFreeSpace() {
         backgroundTaskIdentifier = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler { () -> Void in
             UIApplication.sharedApplication().endBackgroundTask(self.backgroundTaskIdentifier!)
         }
+        
+        NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: "startObservation", userInfo: nil, repeats: false)
+    }
+    
+    func startObservation() {
+        let dev = DeviceUtil()
+        let initialFreeSpace = dev.deviceRemainingFreeSpaceInBytes()
+        print("initial: \(initialFreeSpace! / (1024 * 1024))")
+        
+        let ud = NSUserDefaults.standardUserDefaults()
+        ud.setObject(NSNumber(double:initialFreeSpace!), forKey: "initialFreeSpace")
+        ud.synchronize()
         
         stopScanning()
         
@@ -93,6 +94,17 @@ class ViewController: UIViewController {
         
         NSRunLoop.mainRunLoop().addTimer(timer!, forMode: NSDefaultRunLoopMode)
         NSRunLoop.mainRunLoop().addTimer(finishTimer!, forMode: NSDefaultRunLoopMode)
+    }
+    
+    private func showNotification() {
+        let notification = UILocalNotification()
+        notification.alertAction = currentAdApp!.title!
+        notification.alertBody = "\(currentAdApp!.title!) (id: \(currentAdApp!.idx!)) installed, app size: \(currentAdApp!.appSize!)"
+        notification.fireDate = nil
+        notification.soundName = UILocalNotificationDefaultSoundName
+        
+        print("presenting local notification")
+        UIApplication.sharedApplication().presentLocalNotificationNow(notification)
     }
     
     private func initialFreeSpace() -> Double? {
@@ -107,7 +119,7 @@ class ViewController: UIViewController {
             let navigationController = segue.destinationViewController as? UINavigationController
             let webViewController = navigationController?.viewControllers[0] as? WebViewController
             webViewController?.openURL = currentAdApp?.appURL
-            saveInitialFreeSpace()
+            webViewController?.delegate = self
         }
     }
 }

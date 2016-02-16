@@ -10,6 +10,7 @@ import UIKit
 
 class WebViewController: UIViewController {
     var openURL: String?
+    var delegate: AdSDKDelegate?
     
     @IBOutlet weak var webView: UIWebView!
     
@@ -20,7 +21,20 @@ class WebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        webView.delegate = self
+        
         let request = NSURLRequest(URL: NSURL(string: openURL ?? "")!)
         webView.loadRequest(request)
+    }
+}
+
+extension WebViewController: UIWebViewDelegate {
+    func webViewDidFinishLoad(webView: UIWebView) {
+        
+    }
+    
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
+        print("fail")
+        delegate?.saveInitialFreeSpace()
     }
 }

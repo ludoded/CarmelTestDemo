@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import MachO
 
 enum AppSizeType {
     case KB
@@ -22,6 +23,11 @@ class DeviceUtil {
             attributes = try NSFileManager.defaultManager().attributesOfFileSystemForPath(documentDirectoryPath.last! as String)
             let freeSize = attributes[NSFileSystemFreeSize] as? NSNumber
             if (freeSize != nil) {
+                let formatter = NSByteCountFormatter()
+                formatter.allowedUnits = .UseMB
+                formatter.countStyle = .Binary
+                let freeBytes = formatter.stringFromByteCount(freeSize!.longLongValue)
+                print("byte counts: \(freeBytes)")
                 return freeSize?.doubleValue
             } else {
                 return nil
@@ -33,9 +39,8 @@ class DeviceUtil {
     
     static func appSizeToBytes(size: String) -> Double {
         let appSizeType = DeviceUtil.appSizeType(size)
-        let appSize = atof(size)//NSNumberFormatter().numberFromString(size)?.doubleValue ?? 0
+        let appSize = atof(size)
         var multiplier: Int64 = 1
-        
         
         switch appSizeType {
         case .KB:
@@ -46,7 +51,10 @@ class DeviceUtil {
             multiplier *= 1024 * 1024 * 1024
         }
         
-        return appSize * Double(multiplier)
+        let byteSize = appSize * Double(multiplier)
+        let twentyFiveMB: Double = 25 * 1024 * 1024
+        
+        return byteSize > twentyFiveMB ? byteSize / 2 : byteSize
     }
     
     private static func appSizeType(size: String) -> AppSizeType {
